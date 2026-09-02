@@ -1,0 +1,20 @@
+# Archivos de configuración con credenciales
+config_db.php
+
+# Archivos de prueba
+test_*.php
+test_*.html
+
+# Archivos del sistema
+Thumbs.db
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Directorios
+/node_modules/
+/vendor/
+.idea/
+.vscode/
+*.log
