@@ -5,7 +5,6 @@ Constants::create_filejs( true );
 
 include ( Constants::getpath_root() . 'config.php' );
 include ( Constants::getpath_tweb() . 'core.php' );
-include ( Constants::getpath_tweb() . 'core.sidebar.php' );
 include ( Constants::getpath_root() . 'helpers.php' );
 
 checkAcceso(['admin']);
@@ -13,24 +12,24 @@ checkAcceso(['admin']);
 include('view_header.php');
 ?>
 
-<h4 class="fw-bold mb-4"><i class="fas fa-users-cog me-2"></i>Gestión de Usuarios</h4>
+<h4 class="fw-bold mb-3"><i class="fas fa-users-cog me-2"></i>Usuarios</h4>
 
-<div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
-  <div class="card-body">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h6 class="fw-bold mb-0">Lista de Usuarios</h6>
-      <button class="btn btn-primary btn-sm" onclick="openModal()" style="background: linear-gradient(135deg, #1a237e, #283593); border: none;">
-        <i class="fas fa-plus me-1"></i>Nuevo Usuario
+<div class="card border-0 shadow-sm mb-3" style="border-radius: 10px;">
+  <div class="card-body py-2 px-2">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <h6 class="fw-bold mb-0" style="font-size:13px;">Lista de Usuarios</h6>
+      <button class="btn btn-primary btn-sm" onclick="openModal()" style="background: linear-gradient(135deg, #1a237e, #283593); border: none; font-size:12px;">
+        <i class="fas fa-plus me-1"></i>Nuevo
       </button>
     </div>
     <div class="table-responsive">
-      <table class="table table-hover table-striped">
-        <thead style="background: #f8f9fa;">
+      <table class="table table-hover table-sm mb-0">
+        <thead class="table-light">
           <tr>
             <th>Nombre</th>
             <th>Usuario</th>
             <th>Rol</th>
-            <th>Creado</th>
+            <th class="d-none d-md-table-cell">Creado</th>
             <th class="text-center">Acciones</th>
           </tr>
         </thead>
@@ -97,15 +96,15 @@ include('view_header.php');
   function renderTable(data) {
     var html = '';
     if (data.length === 0) {
-      html = '<tr><td colspan="5" class="text-center text-muted">No hay usuarios registrados.</td></tr>';
+      html = '<tr><td colspan="5" class="text-center text-muted">No hay usuarios.</td></tr>';
     } else {
       data.forEach(function(r) {
         var badge = r.rol === 'admin' ? 'bg-danger' : r.rol === 'cajero' ? 'bg-warning text-dark' : 'bg-primary';
         html += '<tr>';
-        html += '<td class="fw-bold">' + r.username + '</td>';
+        html += '<td class="fw-bold" style="font-size:12px;">' + r.username + '</td>';
         html += '<td>' + r.user + '</td>';
-        html += '<td><span class="badge ' + badge + '">' + r.rol.toUpperCase() + '</span></td>';
-        html += '<td><small>' + r.created_at + '</small></td>';
+        html += '<td><span class="badge ' + badge + '" style="font-size:10px;">' + r.rol.toUpperCase() + '</span></td>';
+        html += '<td class="d-none d-md-table-cell"><small>' + r.created_at + '</small></td>';
         html += '<td class="text-center">';
         html += '<button class="btn btn-sm btn-outline-primary me-1" onclick="editUsuario(' + r.id + ')"><i class="fas fa-edit"></i></button>';
         html += '<button class="btn btn-sm btn-outline-danger" onclick="deleteUsuario(' + r.id + ')"><i class="fas fa-trash"></i></button>';

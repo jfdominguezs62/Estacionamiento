@@ -5,39 +5,36 @@ Constants::create_filejs( true );
 
 include ( Constants::getpath_root() . 'config.php' );
 include ( Constants::getpath_tweb() . 'core.php' );
-include ( Constants::getpath_tweb() . 'core.sidebar.php' );
 include ( Constants::getpath_root() . 'helpers.php' );
 
 include('view_header.php');
 ?>
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-  <h4 class="fw-bold mb-0"><i class="fas fa-car me-2"></i>Registro de Entrada / Salida</h4>
-  <div class="input-group" style="max-width: 320px;">
-    <span class="input-group-text bg-white py-1" style="border-radius:8px 0 0 8px;"><i class="fas fa-search text-muted"></i></span>
-    <input type="text" class="form-control form-control-sm py-1" id="buscar-vehiculo" placeholder="Buscar por placa, marca o cajón..." style="border-radius:0 8px 8px 0; font-size:14px;" oninput="filtrarDentro()">
-  </div>
+  <h4 class="fw-bold mb-0"><i class="fas fa-car me-2"></i>Registro Entrada/Salida</h4>
+  <input type="text" class="form-control form-control-sm py-1 d-none d-md-block" id="buscar-vehiculo" placeholder="Buscar placa, marca, cajón..." style="max-width:250px; font-size:13px;" oninput="filtrarDentro()">
 </div>
+<input type="text" class="form-control form-control-sm py-1 mb-2 d-md-none" id="buscar-vehiculo-mobile" placeholder="Buscar placa, marca, cajón..." style="font-size:13px;" oninput="$('#buscar-vehiculo').val(this.value);filtrarDentro();">
 
-<!-- Registro Entrada - Barra Compacta -->
+<!-- Registro Entrada - Formulario -->
 <div class="card border-0 shadow-sm mb-3" style="border-radius: 12px;">
-  <div class="card-header text-white fw-bold py-2" style="background: linear-gradient(135deg, #1b5e20, #2e7d32); border-radius: 12px 12px 0 0; font-size: 14px;">
+  <div class="card-header text-white fw-bold py-2" style="background: linear-gradient(135deg, #1b5e20, #2e7d32); border-radius: 12px 12px 0 0; font-size: 13px;">
     <i class="fas fa-sign-in-alt me-2"></i>Registrar Entrada
   </div>
-  <div class="card-body py-2 px-3">
-    <div class="row align-items-end g-2">
-      <div class="col">
-        <label class="form-label fw-bold mb-0" style="font-size:12px;">Sección</label>
+  <div class="card-body py-2 px-2">
+    <div class="row g-2">
+      <div class="col-6 col-md entry-field">
+        <label class="form-label fw-bold mb-0" style="font-size:11px;">Sección</label>
         <select class="form-select form-select-sm" id="reg-seccion" onchange="loadTarifaPreview()">
           <option value="">Sección...</option>
         </select>
       </div>
-      <div class="col" style="max-width:100px;">
-        <label class="form-label fw-bold mb-0" style="font-size:12px;">Cajón</label>
-        <input type="text" class="form-control form-control-sm text-uppercase fw-bold" id="reg-cajon" placeholder="A-01" maxlength="10" style="font-size:14px; letter-spacing:1px;">
+      <div class="col-6 col-md-2 entry-field">
+        <label class="form-label fw-bold mb-0" style="font-size:11px;">Cajón</label>
+        <input type="text" class="form-control form-control-sm text-uppercase fw-bold" id="reg-cajon" placeholder="A-01" maxlength="10" style="letter-spacing:1px;">
       </div>
-      <div class="col" style="max-width:130px;">
-        <label class="form-label fw-bold mb-0" style="font-size:12px;">Tipo</label>
+      <div class="col-6 col-md entry-field">
+        <label class="form-label fw-bold mb-0" style="font-size:11px;">Tipo</label>
         <select class="form-select form-select-sm" id="reg-tipo" onchange="loadTarifaPreview()">
           <option value="auto">Auto</option>
           <option value="moto">Moto</option>
@@ -45,21 +42,21 @@ include('view_header.php');
           <option value="bicicleta">Bicicleta</option>
         </select>
       </div>
-      <div class="col" style="max-width:110px;">
-        <label class="form-label fw-bold mb-0" style="font-size:12px;">Placa</label>
-        <input type="text" class="form-control form-control-sm text-uppercase fw-bold" id="reg-placa" placeholder="ABC-1234" maxlength="10" style="font-size:14px; letter-spacing:1px;">
+      <div class="col-6 col-md-2 entry-field">
+        <label class="form-label fw-bold mb-0" style="font-size:11px;">Placa</label>
+        <input type="text" class="form-control form-control-sm text-uppercase fw-bold" id="reg-placa" placeholder="ABC-1234" maxlength="10" style="letter-spacing:1px;">
       </div>
-      <div class="col" style="max-width:110px;">
-        <label class="form-label fw-bold mb-0" style="font-size:12px;">Marca</label>
+      <div class="col-6 col-md entry-field">
+        <label class="form-label fw-bold mb-0" style="font-size:11px;">Marca</label>
         <input type="text" class="form-control form-control-sm" id="reg-marca" placeholder="Toyota" maxlength="50">
       </div>
-      <div class="col" style="max-width:100px;">
-        <label class="form-label fw-bold mb-0" style="font-size:12px;">Color</label>
+      <div class="col-6 col-md entry-field">
+        <label class="form-label fw-bold mb-0" style="font-size:11px;">Color</label>
         <input type="text" class="form-control form-control-sm" id="reg-color" placeholder="Rojo" maxlength="30">
       </div>
-      <div class="col-auto">
-        <span id="tarifa-preview-inline" class="badge bg-info me-1 d-none" style="font-size:11px;">$<span id="prev-hora">0</span>/h</span>
-        <button class="btn btn-success btn-sm fw-bold" onclick="registrarEntrada()" style="border-radius:8px; white-space:nowrap;">
+      <div class="col-12 col-md-auto entry-field d-flex align-items-end gap-1">
+        <span id="tarifa-preview-inline" class="badge bg-info d-none" style="font-size:10px;">$<span id="prev-hora">0</span>/h</span>
+        <button class="btn btn-success btn-sm fw-bold flex-grow-1 flex-md-grow-0" onclick="registrarEntrada()" style="border-radius:8px;">
           <i class="fas fa-check-circle me-1"></i>Entrada
         </button>
       </div>
@@ -69,34 +66,39 @@ include('view_header.php');
 
 <!-- Vehículos Dentro -->
 <div class="card border-0 shadow-sm" style="border-radius: 12px;">
-  <div class="card-header text-white fw-bold py-2 d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #1a237e, #283593); border-radius: 12px 12px 0 0; font-size: 14px;">
+  <div class="card-header text-white fw-bold py-2 d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #1a237e, #283593); border-radius: 12px 12px 0 0; font-size: 13px;">
     <span><i class="fas fa-parking me-2"></i>Vehículos Dentro</span>
     <span class="badge bg-light text-dark" id="count-dentro">0</span>
   </div>
-  <div class="card-body p-0" style="max-height: calc(100vh - 180px); overflow-y: auto;">
-    <table class="table table-hover table-sm mb-0">
+  <div class="card-body p-0" style="max-height: calc(100vh - 200px); overflow-y: auto;">
+    <!-- Desktop table -->
+    <table class="table table-hover table-sm mb-0 d-none d-md-table">
       <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
         <tr>
-          <th style="width:70px;">Cajón</th>
-          <th style="width:90px;">Placa</th>
+          <th style="width:60px;">Cajón</th>
+          <th style="width:80px;">Placa</th>
           <th>Marca/Color</th>
-          <th style="width:90px;">Tipo</th>
+          <th style="width:80px;">Tipo</th>
           <th>Sección</th>
           <th>Entrada</th>
-          <th style="width:80px;">Tiempo</th>
-          <th class="text-center" style="width:80px;">Acción</th>
+          <th style="width:70px;">Tiempo</th>
+          <th class="text-center" style="width:70px;">Acción</th>
         </tr>
       </thead>
       <tbody id="tbl-dentro">
         <tr><td colspan="8" class="text-center text-muted py-3">Cargando...</td></tr>
       </tbody>
     </table>
+    <!-- Mobile cards -->
+    <div id="tbl-dentro-mobile" class="d-md-none p-2">
+      <div class="text-center text-muted py-3">Cargando...</div>
+    </div>
   </div>
 </div>
 
-<!-- Modal Salida/Pago - Compacto -->
+<!-- Modal Salida/Pago -->
 <div class="modal fade" id="modalSalida" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
+  <div class="modal-dialog modal-fullscreen-sm-down modal-dialog-centered">
     <div class="modal-content" style="border-radius: 12px;">
       <div class="modal-header text-white py-2" style="background: linear-gradient(135deg, #b71c1c, #c62828); border-radius: 12px 12px 0 0;">
         <h6 class="modal-title fw-bold"><i class="fas fa-sign-out-alt me-2"></i>Registrar Salida</h6>
@@ -106,77 +108,56 @@ include('view_header.php');
         <input type="hidden" id="sal-id">
         <input type="hidden" id="sal-cajon-val">
 
-        <!-- Fila 1: Datos del vehículo -->
-        <div class="row text-center mb-2 py-1" style="background:#f8f9fa; border-radius:8px;">
-          <div class="col">
-            <small class="text-muted d-block" style="font-size:10px;">Cajón</small>
-            <span class="badge bg-dark" id="sal-cajon">-</span>
-          </div>
-          <div class="col">
-            <small class="text-muted d-block" style="font-size:10px;">Placa</small>
-            <span class="fw-bold" id="sal-placa">-</span>
-          </div>
-          <div class="col">
-            <small class="text-muted d-block" style="font-size:10px;">Marca</small>
-            <span id="sal-marca">-</span>
-          </div>
-          <div class="col">
-            <small class="text-muted d-block" style="font-size:10px;">Color</small>
-            <span id="sal-color">-</span>
-          </div>
-          <div class="col">
-            <small class="text-muted d-block" style="font-size:10px;">Tipo</small>
-            <span id="sal-tipo">-</span>
-          </div>
-          <div class="col">
-            <small class="text-muted d-block" style="font-size:10px;">Entrada</small>
-            <span id="sal-entrada">-</span>
-          </div>
-          <div class="col">
-            <small class="text-muted d-block" style="font-size:10px;">Tiempo</small>
-            <span class="badge bg-info" id="sal-tiempo-real">-</span>
-          </div>
+        <!-- Info del vehículo -->
+        <div class="row text-center mb-2 py-1 exit-info-row" style="background:#f8f9fa; border-radius:8px;">
+          <div class="col"><small class="text-muted d-block" style="font-size:9px;">Cajón</small><span class="badge bg-dark" id="sal-cajon">-</span></div>
+          <div class="col"><small class="text-muted d-block" style="font-size:9px;">Placa</small><span class="fw-bold" id="sal-placa">-</span></div>
+          <div class="col d-none d-sm-block"><small class="text-muted d-block" style="font-size:9px;">Marca</small><span id="sal-marca">-</span></div>
+          <div class="col d-none d-sm-block"><small class="text-muted d-block" style="font-size:9px;">Color</small><span id="sal-color">-</span></div>
+          <div class="col"><small class="text-muted d-block" style="font-size:9px;">Tipo</small><span id="sal-tipo">-</span></div>
+          <div class="col"><small class="text-muted d-block" style="font-size:9px;">Entrada</small><span id="sal-entrada">-</span></div>
+          <div class="col"><small class="text-muted d-block" style="font-size:9px;">Tiempo</small><span class="badge bg-info" id="sal-tiempo-real">-</span></div>
         </div>
 
-        <!-- Fila 2: Tipo cobro + Método + Obs -->
+        <!-- Tipo cobro -->
         <div class="row g-2 mb-2">
-          <div class="col-md-4">
-            <label class="form-label fw-bold mb-0" style="font-size:12px;">Tipo Cobro</label>
+          <div class="col-12 col-md-4">
+            <label class="form-label fw-bold mb-0" style="font-size:11px;">Tipo Cobro</label>
             <div class="btn-group btn-group-sm w-100" role="group">
               <input type="radio" class="btn-check" name="cobro_fraccion" id="cobro-fraccion" value="1" checked onchange="actualizarCobro()">
-              <label class="btn btn-outline-success" for="cobro-fraccion" style="font-size:11px;">Fracción=Hora</label>
+              <label class="btn btn-outline-success" for="cobro-fraccion" style="font-size:10px;">Fracción=Hora</label>
               <input type="radio" class="btn-check" name="cobro_fraccion" id="cobro-completa" value="0" onchange="actualizarCobro()">
-              <label class="btn btn-outline-primary" for="cobro-completa" style="font-size:11px;">Solo Horas</label>
+              <label class="btn btn-outline-primary" for="cobro-completa" style="font-size:10px;">Solo Horas</label>
             </div>
           </div>
-          <div class="col-md-3">
-            <label class="form-label fw-bold mb-0" style="font-size:12px;">Método Pago</label>
+          <div class="col-6 col-md-3">
+            <label class="form-label fw-bold mb-0" style="font-size:11px;">Método Pago</label>
             <select class="form-select form-select-sm" id="sal-metodo">
               <option value="efectivo">Efectivo</option>
               <option value="tarjeta">Tarjeta</option>
               <option value="otro">Otro</option>
             </select>
           </div>
-          <div class="col-md-3">
-            <label class="form-label fw-bold mb-0" style="font-size:12px;">Observaciones</label>
+          <div class="col-6 col-md-3">
+            <label class="form-label fw-bold mb-0" style="font-size:11px;">Observaciones</label>
             <input type="text" class="form-control form-control-sm" id="sal-obs" placeholder="Opcional">
           </div>
-          <div class="col-md-2 d-flex align-items-end">
+          <div class="col-12 col-md-2 d-flex align-items-end">
             <div class="text-center w-100">
               <small class="text-muted d-block" style="font-size:10px;">TOTAL</small>
-              <h4 class="fw-bold text-success mb-0" id="sal-total">$0.00</h4>
+              <h4 class="fw-bold text-success mb-0" id="sal-total" style="font-size:22px;">$0.00</h4>
             </div>
           </div>
         </div>
 
-        <!-- Fila 3: Resumen cobro -->
+        <!-- Resumen cobro -->
         <div class="row text-center py-1 mb-2" style="background:#e8f5e9; border-radius:8px;">
-          <div class="col"><small class="text-muted" style="font-size:11px;">Horas: <strong id="sal-horas" class="text-primary">0</strong></small></div>
-          <div class="col"><small class="text-muted" style="font-size:11px;">Tarifa: <strong id="sal-monto-hora">$0</strong></small></div>
-          <div class="col"><small class="text-muted" style="font-size:11px;">Concepto: <strong id="sal-concepto">-</strong></small></div>
+          <div class="col"><small class="text-muted" style="font-size:10px;">Horas: <strong id="sal-horas" class="text-primary">0</strong></small></div>
+          <div class="col"><small class="text-muted" style="font-size:10px;">Tarifa: <strong id="sal-monto-hora">$0</strong></small></div>
+          <div class="col"><small class="text-muted" style="font-size:10px;">Concepto: <strong id="sal-concepto">-</strong></small></div>
         </div>
 
-        <!-- Desglose detallado -->
+        <!-- Desglose -->
         <div id="sal-desglose" class="px-2 mb-2" style="background:#f8f9fa; border-radius:8px; padding:8px;"></div>
       </div>
       <div class="modal-footer py-2 border-0">
@@ -247,9 +228,13 @@ include('view_header.php');
     $('#count-dentro').text(data.length);
     var filtro = ($('#buscar-vehiculo').val() || '').toUpperCase().trim();
     var html = '';
+    var htmlMobile = '';
+
     if (data.length === 0) {
       html = '<tr><td colspan="8" class="text-center text-muted py-3">No hay vehículos dentro del estacionamiento.</td></tr>';
+      htmlMobile = '<div class="text-center text-muted py-3">No hay vehículos dentro.</div>';
     } else {
+      var count = 0;
       data.forEach(function(r) {
         var match = !filtro || 
           (r.placa || '').toUpperCase().indexOf(filtro) !== -1 ||
@@ -257,25 +242,43 @@ include('view_header.php');
           (r.cajon || '').toUpperCase().indexOf(filtro) !== -1 ||
           (r.color || '').toUpperCase().indexOf(filtro) !== -1;
         if (!match) return;
+        count++;
         var icon = r.tipo_vehiculo === 'auto' ? 'fa-car' : r.tipo_vehiculo === 'moto' ? 'fa-motorcycle' : r.tipo_vehiculo === 'camioneta' ? 'fa-truck' : 'fa-bicycle';
         var marcaColor = (r.marca || '-') + ' / ' + (r.color || '-');
+
+        // Desktop row
         html += '<tr>';
-        html += '<td><span class="badge bg-dark fs-6">' + r.cajon + '</span></td>';
+        html += '<td><span class="badge bg-dark">' + r.cajon + '</span></td>';
         html += '<td class="fw-bold" style="letter-spacing: 1px;">' + r.placa + '</td>';
         html += '<td><small>' + marcaColor + '</small></td>';
         html += '<td><i class="fas ' + icon + ' me-1"></i>' + r.tipo_vehiculo + '</td>';
         html += '<td>' + r.seccion_nombre + '</td>';
         html += '<td><small>' + r.fecha_entrada + '</small></td>';
         html += '<td><span class="badge bg-info">' + r.tiempo_transcurrido + '</span></td>';
-        html += '<td class="text-center">';
-        html += '<button class="btn btn-sm btn-danger" onclick="openSalida(' + r.id + ')"><i class="fas fa-sign-out-alt me-1"></i>Salida</button>';
-        html += '</td></tr>';
+        html += '<td class="text-center"><button class="btn btn-sm btn-danger" onclick="openSalida(' + r.id + ')"><i class="fas fa-sign-out-alt"></i></button></td></tr>';
+
+        // Mobile card
+        htmlMobile += '<div class="card mb-2 border" style="border-radius:10px!important;font-size:12px;">';
+        htmlMobile += '<div class="card-body py-2 px-2">';
+        htmlMobile += '<div class="d-flex justify-content-between align-items-center mb-1">';
+        htmlMobile += '<span class="badge bg-dark" style="font-size:13px;">' + r.cajon + '</span>';
+        htmlMobile += '<span class="fw-bold" style="letter-spacing:1px;font-size:14px;">' + r.placa + '</span>';
+        htmlMobile += '<span class="badge bg-info" style="font-size:10px;">' + r.tiempo_transcurrido + '</span>';
+        htmlMobile += '</div>';
+        htmlMobile += '<div class="d-flex justify-content-between align-items-center">';
+        htmlMobile += '<div><small class="text-muted"><i class="fas ' + icon + ' me-1"></i>' + r.tipo_vehiculo + ' · ' + r.seccion_nombre + '</small>';
+        if (r.marca || r.color) htmlMobile += '<br><small class="text-muted">' + marcaColor + '</small>';
+        htmlMobile += '</div>';
+        htmlMobile += '<button class="btn btn-sm btn-danger" onclick="openSalida(' + r.id + ')" style="font-size:11px;"><i class="fas fa-sign-out-alt me-1"></i>Salida</button>';
+        htmlMobile += '</div></div></div>';
       });
-      if (html === '') {
+      if (count === 0) {
         html = '<tr><td colspan="8" class="text-center text-muted py-3">No se encontró "' + filtro + '"</td></tr>';
+        htmlMobile = '<div class="text-center text-muted py-3">No se encontró "' + filtro + '"</div>';
       }
     }
     $('#tbl-dentro').html(html);
+    $('#tbl-dentro-mobile').html(htmlMobile);
   }
 
   function filtrarDentro() {

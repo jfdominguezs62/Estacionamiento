@@ -5,31 +5,30 @@ Constants::create_filejs( true );
 
 include ( Constants::getpath_root() . 'config.php' );
 include ( Constants::getpath_tweb() . 'core.php' );
-include ( Constants::getpath_tweb() . 'core.sidebar.php' );
 include ( Constants::getpath_root() . 'helpers.php' );
 
 include('view_header.php');
 ?>
 
-<h4 class="fw-bold mb-4"><i class="fas fa-th-large me-2"></i>Secciones del Estacionamiento</h4>
+<h4 class="fw-bold mb-3"><i class="fas fa-th-large me-2"></i>Secciones</h4>
 
-<div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
-  <div class="card-body">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h6 class="fw-bold mb-0">Lista de Secciones</h6>
-      <button class="btn btn-primary btn-sm" onclick="openModal()" style="background: linear-gradient(135deg, #1a237e, #283593); border: none;">
-        <i class="fas fa-plus me-1"></i>Nueva Sección
+<div class="card border-0 shadow-sm mb-3" style="border-radius: 10px;">
+  <div class="card-body py-2 px-2">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <h6 class="fw-bold mb-0" style="font-size:13px;">Lista de Secciones</h6>
+      <button class="btn btn-primary btn-sm" onclick="openModal()" style="background: linear-gradient(135deg, #1a237e, #283593); border: none; font-size:12px;">
+        <i class="fas fa-plus me-1"></i>Nueva
       </button>
     </div>
     <div class="table-responsive">
-      <table class="table table-hover table-striped">
-        <thead style="background: #f8f9fa;">
+      <table class="table table-hover table-sm mb-0">
+        <thead class="table-light">
           <tr>
             <th>Nombre</th>
-            <th>Capacidad</th>
-            <th>Ocupados</th>
-            <th>Disponibles</th>
-            <th>Estatus</th>
+            <th class="text-center">Cap</th>
+            <th class="text-center">Ocup</th>
+            <th class="text-center d-none d-sm-table-cell">Disp</th>
+            <th class="text-center d-none d-md-table-cell">Estatus</th>
             <th class="text-center">Acciones</th>
           </tr>
         </thead>
@@ -95,17 +94,17 @@ include('view_header.php');
   function renderTable(data) {
     var html = '';
     if (data.length === 0) {
-      html = '<tr><td colspan="6" class="text-center text-muted">No hay secciones registradas.</td></tr>';
+      html = '<tr><td colspan="6" class="text-center text-muted">No hay secciones.</td></tr>';
     } else {
       data.forEach(function(r) {
         var disp = r.capacidad - r.ocupados;
-        var badge = r.estatus === 'activo' ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-secondary">Inactivo</span>';
+        var badge = r.estatus === 'activo' ? '<span class="badge bg-success" style="font-size:10px;">Activo</span>' : '<span class="badge bg-secondary" style="font-size:10px;">Inactivo</span>';
         html += '<tr>';
-        html += '<td class="fw-bold">' + r.nombre + '</td>';
-        html += '<td>' + r.capacidad + '</td>';
-        html += '<td>' + r.ocupados + '</td>';
-        html += '<td>' + disp + '</td>';
-        html += '<td>' + badge + '</td>';
+        html += '<td class="fw-bold" style="font-size:12px;">' + r.nombre + '</td>';
+        html += '<td class="text-center">' + r.capacidad + '</td>';
+        html += '<td class="text-center">' + r.ocupados + '</td>';
+        html += '<td class="text-center d-none d-sm-table-cell">' + disp + '</td>';
+        html += '<td class="text-center d-none d-md-table-cell">' + badge + '</td>';
         html += '<td class="text-center">';
         html += '<button class="btn btn-sm btn-outline-primary me-1" onclick="editSeccion(' + r.id + ')"><i class="fas fa-edit"></i></button>';
         if (canDelete) {

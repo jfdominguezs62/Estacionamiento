@@ -5,37 +5,35 @@ Constants::create_filejs( true );
 
 include ( Constants::getpath_root() . 'config.php' );
 include ( Constants::getpath_tweb() . 'core.php' );
-include ( Constants::getpath_tweb() . 'core.sidebar.php' );
 include ( Constants::getpath_root() . 'helpers.php' );
 
 include('view_header.php');
 ?>
 
-<h4 class="fw-bold mb-4"><i class="fas fa-tags me-2"></i>Tarifas por Sección y Tipo de Vehículo</h4>
+<h4 class="fw-bold mb-3"><i class="fas fa-tags me-2"></i>Tarifas</h4>
 
-<div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
-  <div class="card-body">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h6 class="fw-bold mb-0">Lista de Tarifas</h6>
-      <button class="btn btn-primary btn-sm" onclick="openModal()" style="background: linear-gradient(135deg, #1a237e, #283593); border: none;">
-        <i class="fas fa-plus me-1"></i>Nueva Tarifa
+<div class="card border-0 shadow-sm mb-3" style="border-radius: 10px;">
+  <div class="card-body py-2 px-2">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <h6 class="fw-bold mb-0" style="font-size:13px;">Lista de Tarifas</h6>
+      <button class="btn btn-primary btn-sm" onclick="openModal()" style="background: linear-gradient(135deg, #1a237e, #283593); border: none; font-size:12px;">
+        <i class="fas fa-plus me-1"></i>Nueva
       </button>
     </div>
     <div class="table-responsive">
-      <table class="table table-hover table-striped">
-        <thead style="background: #f8f9fa;">
+      <table class="table table-hover table-sm mb-0">
+        <thead class="table-light">
           <tr>
             <th>Sección</th>
-            <th>Tipo Vehículo</th>
-            <th>Monto/Hora</th>
-            <th>Monto/Día</th>
-            <th>Vigente Desde</th>
-            <th>Estado</th>
+            <th>Tipo</th>
+            <th>/Hora</th>
+            <th class="d-none d-sm-table-cell">/Día</th>
+            <th class="d-none d-md-table-cell">Desde</th>
             <th class="text-center">Acciones</th>
           </tr>
         </thead>
         <tbody id="tbl-tarifas">
-          <tr><td colspan="7" class="text-center text-muted">Cargando...</td></tr>
+          <tr><td colspan="6" class="text-center text-muted">Cargando...</td></tr>
         </tbody>
       </table>
     </div>
@@ -129,18 +127,16 @@ include('view_header.php');
   function renderTable(data) {
     var html = '';
     if (data.length === 0) {
-      html = '<tr><td colspan="7" class="text-center text-muted">No hay tarifas registradas.</td></tr>';
+      html = '<tr><td colspan="6" class="text-center text-muted">No hay tarifas.</td></tr>';
     } else {
       data.forEach(function(r) {
         var icon = r.tipo_vehiculo === 'auto' ? 'fa-car' : r.tipo_vehiculo === 'moto' ? 'fa-motorcycle' : r.tipo_vehiculo === 'camioneta' ? 'fa-truck' : 'fa-bicycle';
-        var badge = r.activo == 1 ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-secondary">Inactivo</span>';
         html += '<tr>';
-        html += '<td>' + r.seccion_nombre + '</td>';
-        html += '<td><i class="fas ' + icon + ' me-1"></i>' + r.tipo_vehiculo + '</td>';
+        html += '<td style="font-size:12px;">' + r.seccion_nombre + '</td>';
+        html += '<td><i class="fas ' + icon + ' me-1"></i><span class="d-none d-sm-inline">' + r.tipo_vehiculo + '</span></td>';
         html += '<td class="fw-bold">$' + parseFloat(r.monto_hora).toFixed(2) + '</td>';
-        html += '<td>$' + parseFloat(r.monto_dia).toFixed(2) + '</td>';
-        html += '<td>' + r.vigente_desde + '</td>';
-        html += '<td>' + badge + '</td>';
+        html += '<td class="d-none d-sm-table-cell">$' + parseFloat(r.monto_dia).toFixed(2) + '</td>';
+        html += '<td class="d-none d-md-table-cell"><small>' + r.vigente_desde + '</small></td>';
         html += '<td class="text-center">';
         html += '<button class="btn btn-sm btn-outline-primary me-1" onclick="editTarifa(' + r.id + ')"><i class="fas fa-edit"></i></button>';
         if (canDelete) {

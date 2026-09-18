@@ -5,89 +5,87 @@ Constants::create_filejs( true );
 
 include ( Constants::getpath_root() . 'config.php' );
 include ( Constants::getpath_tweb() . 'core.php' );
-include ( Constants::getpath_tweb() . 'core.sidebar.php' );
 include ( Constants::getpath_root() . 'helpers.php' );
 
 include('view_header.php');
 ?>
 
-<h4 class="fw-bold mb-4"><i class="fas fa-money-check-alt me-2"></i>Historial de Pagos</h4>
+<h4 class="fw-bold mb-3"><i class="fas fa-money-check-alt me-2"></i>Historial de Pagos</h4>
 
 <!-- Resumen -->
-<div class="row mb-4">
-  <div class="col-md-3">
-    <div class="card border-0 shadow-sm text-center" style="border-radius: 12px;">
-      <div class="card-body">
-        <i class="fas fa-calendar-day fa-2x text-primary mb-2"></i>
-        <h4 class="fw-bold mb-0" id="res-cant-hoy">0</h4>
-        <small class="text-muted">Pagos Hoy</small>
+<div class="row mb-3 g-2">
+  <div class="col-6 col-md-3">
+    <div class="card border-0 shadow-sm text-center" style="border-radius: 10px;">
+      <div class="card-body py-2">
+        <i class="fas fa-calendar-day fa-lg text-primary mb-1"></i>
+        <h5 class="fw-bold mb-0" id="res-cant-hoy">0</h5>
+        <small class="text-muted" style="font-size:10px;">Pagos Hoy</small>
       </div>
     </div>
   </div>
-  <div class="col-md-3">
-    <div class="card border-0 shadow-sm text-center" style="border-radius: 12px;">
-      <div class="card-body">
-        <i class="fas fa-dollar-sign fa-2x text-success mb-2"></i>
-        <h4 class="fw-bold mb-0" id="res-total-hoy">$0.00</h4>
-        <small class="text-muted">Cobrado Hoy</small>
+  <div class="col-6 col-md-3">
+    <div class="card border-0 shadow-sm text-center" style="border-radius: 10px;">
+      <div class="card-body py-2">
+        <i class="fas fa-dollar-sign fa-lg text-success mb-1"></i>
+        <h5 class="fw-bold mb-0" id="res-total-hoy">$0.00</h5>
+        <small class="text-muted" style="font-size:10px;">Cobrado Hoy</small>
       </div>
     </div>
   </div>
-  <div class="col-md-3">
-    <div class="card border-0 shadow-sm text-center" style="border-radius: 12px;">
-      <div class="card-body">
-        <i class="fas fa-calendar-alt fa-2x text-info mb-2"></i>
-        <h4 class="fw-bold mb-0" id="res-cant-mes">0</h4>
-        <small class="text-muted">Pagos Mes</small>
+  <div class="col-6 col-md-3">
+    <div class="card border-0 shadow-sm text-center" style="border-radius: 10px;">
+      <div class="card-body py-2">
+        <i class="fas fa-calendar-alt fa-lg text-info mb-1"></i>
+        <h5 class="fw-bold mb-0" id="res-cant-mes">0</h5>
+        <small class="text-muted" style="font-size:10px;">Pagos Mes</small>
       </div>
     </div>
   </div>
-  <div class="col-md-3">
-    <div class="card border-0 shadow-sm text-center" style="border-radius: 12px;">
-      <div class="card-body">
-        <i class="fas fa-coins fa-2x text-warning mb-2"></i>
-        <h4 class="fw-bold mb-0" id="res-total-mes">$0.00</h4>
-        <small class="text-muted">Cobrado Mes</small>
+  <div class="col-6 col-md-3">
+    <div class="card border-0 shadow-sm text-center" style="border-radius: 10px;">
+      <div class="card-body py-2">
+        <i class="fas fa-coins fa-lg text-warning mb-1"></i>
+        <h5 class="fw-bold mb-0" id="res-total-mes">$0.00</h5>
+        <small class="text-muted" style="font-size:10px;">Cobrado Mes</small>
       </div>
     </div>
   </div>
 </div>
 
 <!-- Buscar recibo -->
-<div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
-  <div class="card-body">
-    <div class="input-group">
-      <input type="text" class="form-control" id="buscar-recibo" placeholder="Buscar por número de recibo (Ej: REC-20260729-00001)" style="border-radius: 8px 0 0 8px;">
+<div class="card border-0 shadow-sm mb-3" style="border-radius: 10px;">
+  <div class="card-body py-2 px-2">
+    <div class="input-group input-group-sm">
+      <input type="text" class="form-control" id="buscar-recibo" placeholder="Buscar recibo (Ej: REC-20260729-00001)" style="font-size:12px;">
       <button class="btn btn-primary" onclick="buscarRecibo()" style="background: linear-gradient(135deg, #1a237e, #283593); border: none;">
-        <i class="fas fa-search me-1"></i>Buscar
+        <i class="fas fa-search"></i>
       </button>
     </div>
   </div>
 </div>
 
 <!-- Tabla de pagos -->
-<div class="card border-0 shadow-sm mb-4" style="border-radius: 12px;">
-  <div class="card-body">
+<div class="card border-0 shadow-sm mb-3" style="border-radius: 10px;">
+  <div class="card-body p-0">
     <div class="table-responsive">
-      <table class="table table-hover table-striped">
-        <thead style="background: #f8f9fa;">
+      <table class="table table-hover table-sm mb-0">
+        <thead class="table-light">
           <tr>
             <th>Cajón</th>
             <th>Placa</th>
-            <th>Marca/Color</th>
-            <th>Tipo</th>
-            <th>Sección</th>
-            <th>Entrada</th>
+            <th class="d-none d-md-table-cell">Marca/Color</th>
+            <th class="d-none d-lg-table-cell">Tipo</th>
+            <th class="d-none d-md-table-cell">Sección</th>
+            <th class="d-none d-lg-table-cell">Entrada</th>
             <th>Salida</th>
             <th>Horas</th>
             <th>Monto</th>
-            <th>Método</th>
-            <th>Fecha Pago</th>
-            <th class="text-center">Acción</th>
+            <th class="d-none d-md-table-cell">Método</th>
+            <th class="text-center">Ver</th>
           </tr>
         </thead>
         <tbody id="tbl-pagos">
-          <tr><td colspan="13" class="text-center text-muted">Cargando...</td></tr>
+          <tr><td colspan="11" class="text-center text-muted">Cargando...</td></tr>
         </tbody>
       </table>
     </div>
@@ -96,16 +94,16 @@ include('view_header.php');
 
 <!-- Modal Comprobante -->
 <div class="modal fade" id="modalComprobante" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content" style="border-radius: 12px;">
-      <div class="modal-header text-white" style="background: linear-gradient(135deg, #1b5e20, #2e7d32); border-radius: 12px 12px 0 0;">
-        <h5 class="modal-title fw-bold"><i class="fas fa-receipt me-2"></i>Comprobante de Pago</h5>
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content" style="border-radius: 12px; max-height: 90vh;">
+      <div class="modal-header text-white py-2" style="background: linear-gradient(135deg, #1b5e20, #2e7d32); border-radius: 12px 12px 0 0;">
+        <h6 class="modal-title fw-bold"><i class="fas fa-receipt me-2"></i>Comprobante de Pago</h6>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
-      <div class="modal-body p-4" id="comprobante-content">
+      <div class="modal-body p-3" id="comprobante-content" style="overflow-y: auto;">
       </div>
-      <div class="modal-footer border-0 justify-content-center">
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" style="background: linear-gradient(135deg, #1a237e, #283593); border: none;">Cerrar</button>
+      <div class="modal-footer border-0 py-2">
+        <button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal" style="background: linear-gradient(135deg, #1a237e, #283593); border: none;">Cerrar</button>
       </div>
     </div>
   </div>
@@ -139,26 +137,21 @@ include('view_header.php');
   function renderTable(data) {
     var html = '';
     if (data.length === 0) {
-      html = '<tr><td colspan="13" class="text-center text-muted">No hay pagos registrados.</td></tr>';
+      html = '<tr><td colspan="11" class="text-center text-muted">No hay pagos registrados.</td></tr>';
     } else {
       data.forEach(function(r) {
-        var icon = r.tipo_vehiculo === 'auto' ? 'fa-car' : r.tipo_vehiculo === 'moto' ? 'fa-motorcycle' : r.tipo_vehiculo === 'camioneta' ? 'fa-truck' : 'fa-bicycle';
-        var marcaColor = (r.marca || '-') + ' / ' + (r.color || '-');
         html += '<tr>';
-        html += '<td><span class="badge bg-dark">' + r.cajon + '</span></td>';
-        html += '<td class="fw-bold">' + r.placa + '</td>';
-        html += '<td><small>' + marcaColor + '</small></td>';
-        html += '<td><i class="fas ' + icon + ' me-1"></i>' + r.tipo_vehiculo + '</td>';
-        html += '<td>' + r.seccion_nombre + '</td>';
-        html += '<td><small>' + r.fecha_entrada + '</small></td>';
+        html += '<td><span class="badge bg-dark" style="font-size:10px;">' + r.cajon + '</span></td>';
+        html += '<td class="fw-bold" style="font-size:12px;">' + r.placa + '</td>';
+        html += '<td class="d-none d-md-table-cell"><small>' + (r.marca || '-') + ' / ' + (r.color || '-') + '</small></td>';
+        html += '<td class="d-none d-lg-table-cell"><small>' + r.tipo_vehiculo + '</small></td>';
+        html += '<td class="d-none d-md-table-cell"><small>' + r.seccion_nombre + '</small></td>';
+        html += '<td class="d-none d-lg-table-cell"><small>' + r.fecha_entrada + '</small></td>';
         html += '<td><small>' + r.fecha_salida + '</small></td>';
         html += '<td>' + r.horas + 'h</td>';
         html += '<td class="fw-bold text-success">$' + parseFloat(r.monto_total).toFixed(2) + '</td>';
-        html += '<td>' + r.metodo_pago + '</td>';
-        html += '<td>' + r.fecha_pago + '</td>';
-        html += '<td class="text-center">';
-        html += '<button class="btn btn-sm btn-outline-primary" onclick="verRecibo(\'' + r.recibo + '\')"><i class="fas fa-eye"></i></button>';
-        html += '</td></tr>';
+        html += '<td class="d-none d-md-table-cell"><small>' + r.metodo_pago + '</small></td>';
+        html += '<td class="text-center"><button class="btn btn-sm btn-outline-primary" onclick="verRecibo(\'' + r.recibo + '\')"><i class="fas fa-eye"></i></button></td></tr>';
       });
     }
     $('#tbl-pagos').html(html);
