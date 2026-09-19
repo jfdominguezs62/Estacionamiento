@@ -31,7 +31,7 @@ function GetAll() {
 	$oDb = create_conex();
 	$usuarios = [];
 
-	$r = $oDb->query("SELECT id, username, user, rol, created_at FROM " . TABLA_USUARIOS . " ORDER BY username");
+	$r = $oDb->query("SELECT id, username, user, rol, created_at FROM " . TABLA_USUARIOS . " WHERE user != 'admin' ORDER BY username");
 
 	while ( $row = $oDb->getrow() ) {
 		$usuarios[] = $row;
