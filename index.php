@@ -14,6 +14,7 @@ $oWeb->Activate();
 
 $oLogin = new TLogin( 'myLogin' );
 $oLogin->cImage           = IMAGE_PATH . 'estacionamiento.png';
+$oLogin->cImageCss       = 'login-logo';
 $oLogin->cTitle           = 'Sistema de Control de Estacionamiento';
 $oLogin->cTextUser        = 'Usuario';
 $oLogin->cTextPassword    = 'Contraseña';
@@ -28,6 +29,20 @@ $oLogin->Activate();
 
 $oWeb->End();
 ?>
+
+<style>
+.login-logo { 
+  border: none !important; 
+  box-shadow: none !important; 
+  outline: none !important; 
+  background: transparent !important; 
+  border-radius: 50%; 
+}
+.modal-login .avatar.login-logo {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+</style>
 
 <script>
   var oLogin;
