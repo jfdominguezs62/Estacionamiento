@@ -196,11 +196,40 @@ include('view_header.php');
   </div>
 </div>
 
+<!-- Modal Editar Entrada (solo admin) -->
+<div class="modal fade" id="modalEditarEntrada" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius: 12px;">
+      <div class="modal-header text-white py-2" style="background: linear-gradient(135deg, #e65100, #ef6c00); border-radius: 12px 12px 0 0;">
+        <h6 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i>Editar Fecha de Entrada</h6>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-3">
+        <input type="hidden" id="edit-id">
+        <div class="mb-2 text-center">
+          <span class="badge bg-dark" id="edit-cajon">-</span>
+          <span class="fw-bold ms-2" id="edit-placa">-</span>
+        </div>
+        <label class="form-label fw-bold" style="font-size:12px;">Fecha y hora de entrada</label>
+        <input type="datetime-local" class="form-control" id="edit-fecha">
+        <small class="text-muted" style="font-size:11px;">Solo administradores. No puede ser fecha futura.</small>
+      </div>
+      <div class="modal-footer py-2 border-0">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-warning btn-sm fw-bold" onclick="guardarEntradaEditada()">
+          <i class="fas fa-save me-1"></i>Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   var aDentro = [];
   var aSecciones = [];
   var datosPago = null;
   var ultimoPago = null;
+  var isAdmin = <?php echo (isset($rolUsuario) && $rolUsuario === 'admin') ? 'true' : 'false'; ?>;
 
   function loadSecciones() {
     MsgServer(path.model + 'registros.php', function(dat) {
@@ -255,7 +284,9 @@ include('view_header.php');
         html += '<td>' + r.seccion_nombre + '</td>';
         html += '<td><small>' + r.fecha_entrada + '</small></td>';
         html += '<td><span class="badge bg-info">' + r.tiempo_transcurrido + '</span></td>';
-        html += '<td class="text-center"><button class="btn btn-sm btn-danger" onclick="openSalida(' + r.id + ')"><i class="fas fa-sign-out-alt"></i></button></td></tr>';
+        html += '<td class="text-center" style="white-space:nowrap;">';
+        if (isAdmin) html += '<button class="btn btn-sm btn-outline-warning me-1" title="Editar fecha de entrada (admin)" onclick="openEditarEntrada(' + r.id + ')"><i class="fas fa-edit"></i></button>';
+        html += '<button class="btn btn-sm btn-danger" onclick="openSalida(' + r.id + ')"><i class="fas fa-sign-out-alt"></i></button></td></tr>';
 
         // Mobile card
         htmlMobile += '<div class="card mb-2 border" style="border-radius:10px!important;font-size:12px;">';
@@ -269,7 +300,10 @@ include('view_header.php');
         htmlMobile += '<div><small class="text-muted"><i class="fas ' + icon + ' me-1"></i>' + r.tipo_vehiculo + ' · ' + r.seccion_nombre + '</small>';
         if (r.marca || r.color) htmlMobile += '<br><small class="text-muted">' + marcaColor + '</small>';
         htmlMobile += '</div>';
+        htmlMobile += '<div class="d-flex gap-1">';
+        if (isAdmin) htmlMobile += '<button class="btn btn-sm btn-outline-warning" title="Editar entrada" onclick="openEditarEntrada(' + r.id + ')" style="font-size:11px;"><i class="fas fa-edit"></i></button>';
         htmlMobile += '<button class="btn btn-sm btn-danger" onclick="openSalida(' + r.id + ')" style="font-size:11px;"><i class="fas fa-sign-out-alt me-1"></i>Salida</button>';
+        htmlMobile += '</div>';
         htmlMobile += '</div></div></div>';
       });
       if (count === 0) {
@@ -327,6 +361,34 @@ include('view_header.php');
         MsgNotify(dat.message || "Error al registrar entrada", "error");
       }
     }, { action: 'registrar_entrada', seccion_id: seccion, cajon: cajon, tipo_vehiculo: tipo, placa: placa, marca: marca, color: color });
+  }
+
+  function openEditarEntrada(id) {
+    if (!isAdmin) { MsgNotify("Solo un administrador puede editar la entrada", "error"); return; }
+    var item = aDentro.find(function(x){ return x.id == id; });
+    if (!item) return;
+    $('#edit-id').val(id);
+    $('#edit-cajon').text(item.cajon || '-');
+    $('#edit-placa').text(item.placa || '-');
+    // Convertir "Y-m-d H:i:s" a "Y-m-dTH:i" para datetime-local
+    var f = (item.fecha_entrada || '').replace(' ', 'T').substring(0, 16);
+    $('#edit-fecha').val(f);
+    new bootstrap.Modal(document.getElementById('modalEditarEntrada')).show();
+  }
+
+  function guardarEntradaEditada() {
+    var id = $('#edit-id').val();
+    var fecha = $('#edit-fecha').val();
+    if (!fecha) { MsgNotify("Seleccione fecha y hora", "error"); return; }
+    MsgServer(path.model + 'registros.php', function(dat) {
+      if (dat.result) {
+        MsgNotify(dat.message, "success");
+        bootstrap.Modal.getInstance(document.getElementById('modalEditarEntrada')).hide();
+        loadDentro();
+      } else {
+        MsgNotify(dat.message || "Error al actualizar", "error");
+      }
+    }, { action: 'modificar_entrada', id: id, fecha_entrada: fecha });
   }
 
   function openSalida(id) {

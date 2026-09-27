@@ -41,6 +41,14 @@ $oWeb->End();
 .modal-login .avatar.login-logo {
   background: transparent !important;
   box-shadow: none !important;
+  width: 200px !important;
+  height: 200px !important;
+  top: -100px !important;
+}
+.modal-login .avatar.login-logo img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
 }
 </style>
 

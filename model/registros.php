@@ -30,6 +30,9 @@ switch( $cAction ) {
 	case 'gettarifa':
 		$result = GetTarifa();
 		break;
+	case 'modificar_entrada':
+		$result = ModificarEntrada();
+		break;
 	default:
 		$result = [ 'result' => false, 'message' => 'Acción no permitida' ];
 }
@@ -261,6 +264,52 @@ function RegistrarSalida() {
 	} else {
 		return [ 'result' => false, 'message' => 'Error al registrar la salida' ];
 	}
+}
+
+function ModificarEntrada() {
+	$oSession = new TSession( APP_SESSION );
+	$rol = $oSession->GetVar('rol') ?: 'operador';
+	if ($rol !== 'admin') {
+		return [ 'result' => false, 'message' => 'Solo un administrador puede modificar la fecha de entrada' ];
+	}
+
+	$id = filter_post('id');
+	$fecha = trim(filter_post('fecha_entrada'));
+
+	if (empty($id) || empty($fecha)) {
+		return [ 'result' => false, 'message' => 'ID y fecha de entrada son obligatorios' ];
+	}
+
+	// Aceptar formato datetime-local (Y-m-d\TH:i) o MySQL (Y-m-d H:i:s)
+	$fecha = str_replace('T', ' ', $fecha);
+	if (strlen($fecha) == 16) $fecha .= ':00';
+
+	$ts = strtotime($fecha);
+	if ($ts === false) {
+		return [ 'result' => false, 'message' => 'Formato de fecha no válido' ];
+	}
+	$fecha_mysql = date('Y-m-d H:i:s', $ts);
+
+	if ($ts > time() + 60) {
+		return [ 'result' => false, 'message' => 'La fecha de entrada no puede ser futura' ];
+	}
+
+	$oDb = create_conex();
+
+	$r = $oDb->bind_params("SELECT id FROM registros WHERE id = ? AND estado = 'dentro'", [$id]);
+	$row = $oDb->getrow();
+	if (!$row) {
+		$oDb->Close();
+		return [ 'result' => false, 'message' => 'Registro no encontrado o el vehículo ya salió' ];
+	}
+
+	$success = $oDb->bind_params("UPDATE registros SET fecha_entrada = ? WHERE id = ?", [$fecha_mysql, $id], true);
+	$oDb->Close();
+
+	if ($success) {
+		return [ 'result' => true, 'message' => 'Fecha de entrada actualizada', 'fecha_entrada' => $fecha_mysql ];
+	}
+	return [ 'result' => false, 'message' => 'Error al actualizar la fecha de entrada' ];
 }
 
 function CalcularPago() {
